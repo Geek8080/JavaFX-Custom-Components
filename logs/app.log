@@ -1,0 +1,12 @@
+INFO  | 2020-05-15 10:43:10 | [JavaFX Application Thread] Main (Main.java:21) - 1st log entry
+ERROR | 2020-05-15 10:43:10 | [JavaFX Application Thread] Main (Main.java:22) - This is Error
+FATAL | 2020-05-15 10:43:10 | [JavaFX Application Thread] Main (Main.java:23) - Fatal Error 'tis
+INFO  | 2020-05-15 10:43:51 | [JavaFX Application Thread] Main (Main.java:21) - 1st log entry
+ERROR | 2020-05-15 10:43:51 | [JavaFX Application Thread] Main (Main.java:22) - This is Error
+FATAL | 2020-05-15 10:43:51 | [JavaFX Application Thread] Main (Main.java:23) - Fatal Error 'tis
+INFO  | 2020-05-15 10:47:12 | [JavaFX Application Thread] Main (Main.java:21) - 1st log entry
+ERROR | 2020-05-15 10:47:12 | [JavaFX Application Thread] Main (Main.java:22) - This is Error
+FATAL | 2020-05-15 10:47:12 | [JavaFX Application Thread] Main (Main.java:23) - Fatal Error 'tis
+INFO  | 2020-05-15 10:47:44 | [JavaFX Application Thread] ? (:) - 1st log entry
+ERROR | 2020-05-15 10:47:44 | [JavaFX Application Thread] ? (:) - This is Error
+FATAL | 2020-05-15 10:47:44 | [JavaFX Application Thread] ? (:) - Fatal Error 'tis

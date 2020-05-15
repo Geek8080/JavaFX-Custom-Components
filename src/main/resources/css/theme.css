@@ -1,0 +1,121 @@
+.card{
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 0 0 2em 2em;
+    -fx-border-radius: 0 0 2em 2em;
+}
+
+.text{
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 19;
+    -fx-focus-traversable: false;
+    -fx-fill: #3E3E3E;
+    -fx-wrap-text: true;
+}
+
+#downloadName{
+    -fx-text-alignment: left;
+    -fx-wrap-text: "true";
+}
+
+#fileType{
+    -fx-fill: #3E4A4A;
+    -fx-text-alignment: center;
+}
+
+#infoKey{
+    -fx-alignment: right;
+    -fx-font-size: 17;
+    -fx-focus-traversable: false;
+}
+
+#infoValue{
+    -fx-font-size: 17;
+    -fx-focus-traversable: false;
+}
+
+.titlePane{
+    -fx-alignment: center;
+}
+
+#title{
+    -fx-fill: #414141;
+    -fx-font-size: 30;
+    -fx-text-alignment: center;
+    -fx-font-weight: bolder;
+    -fx-wrap-text: false;
+}
+
+.fileTypeVBox{
+    -fx-alignment: center;
+}
+
+.hbox{
+    -fx-alignment: center;
+    -fx-spacing: 5;
+}
+
+#keyValue{
+    -fx-spacing: 10;
+}
+
+.keyVBox{
+    -fx-spacing: 30;
+    -fx-alignment: center-right;
+}
+
+.valueVBox{
+    -fx-spacing: 30;
+    -fx-alignment: center-left;
+}
+
+
+
+.shrinkImageButton{
+    -fx-background-color: #6e6e6e;
+    -fx-pref-height: 50;
+    -fx-pref-width: 50;
+}
+
+.progress-bar > .bar {
+    -fx-accent: #FFFFFF;
+    -fx-background-color: green;
+}
+
+.jfx-button{
+    -fx-padding: 0.4em 0.9em;
+    -jfx-button-type: RAISED;
+    -fx-border-color: #727B74;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 20;
+    -fx-font-weight: normal;
+    -fx-focus-traversable: false;
+    -fx-text-fill: WHITE;
+    -fx-background-radius: 11em;
+    -fx-border-radius: 11em;
+    -fx-background-color: #D9DBD8;
+}
+
+.jfx-button:hover{
+    -fx-background-color: #727B74;
+}
+
+.button-raised{
+    -fx-padding: 0.7em 0.57em;
+    -fx-font-size: 14px;
+    -jfx-button-type: RAISED;
+    -fx-background-color: rgb(77,102,204);
+    -fx-pref-width: 200;
+    -fx-text-fill: WHITE;
+}
+
+.progressBar > .bar {
+    -fx-accent: green;
+    -fx-background-color: linear-gradient(
+            from 0px .75em to .75em 0px,
+            repeat,
+            -fx-accent 0%,
+            -fx-accent 49%,
+            derive(-fx-accent, 30%) 50%,
+            derive(-fx-accent, 30%) 99%
+    );
+}
