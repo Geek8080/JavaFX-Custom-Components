@@ -2,30 +2,55 @@ package controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXProgressBar;
+import com.jfoenix.effects.JFXDepthManager;
+import javafx.animation.FadeTransition;
+import javafx.animation.RotateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Control;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
+import utils.Downloadable;
 
-public class DownloadCard extends AnchorPane{
+import java.util.Timer;
+import java.util.TimerTask;
 
-    public DownloadCard(){
+
+public class DownloadCard extends AnchorPane {
+
+    public DownloadCard() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/DownloadCard.fxml"));
+
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
-        try{
+        this.setMaxSize(Control.USE_PREF_SIZE, Control.USE_PREF_SIZE);
+        this.setMinSize(Control.USE_PREF_SIZE, Control.USE_PREF_SIZE);
+
+        try {
             fxmlLoader.load();
-            init();
-        }catch (Exception ex){
+            JFXDepthManager.setDepth(this, 2);
+
+            //depthManager.setDepth(shrinkIconImage, 3);
+            //init();
+
+        } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println(ex.getMessage());
         }
     }
+
+    private boolean isCollapsed = true;
+    private Downloadable downloadableObject;
+    private boolean isPaused = false;
 
     @FXML
     private AnchorPane cardBasePane;
@@ -94,24 +119,204 @@ public class DownloadCard extends AnchorPane{
     private JFXButton cancelButton;
 
     @FXML
-    void cancel(MouseEvent event) {
-
+    public void cancel(MouseEvent event) {
+        downloadableObject.cancel();
     }
 
     @FXML
-    void pause_resume(MouseEvent event) {
-
+    public void pause_resume(MouseEvent event) {
+        if (isPaused) {
+            pauseResumeButton.setDisable(true);
+            downloadableObject.resume();
+            isPaused = false;
+            pauseResumeButton.setDisable(false);
+            pauseResumeButton.setText("Pause");
+        } else {
+            pauseResumeButton.setDisable(true);
+            downloadableObject.pause();
+            isPaused = true;
+            pauseResumeButton.setDisable(true);
+            pauseResumeButton.setText("Resume");
+        }
     }
 
     @FXML
     void shrink_expand(MouseEvent event) {
 
+        Thread rotate = new Thread(() -> {
+            RotateTransition rt = new RotateTransition();
+            rt.setAxis(Rotate.Z_AXIS);
+            rt.setByAngle(180);
+            rt.setDuration(Duration.millis(500));
+            rt.setNode(shrinkIconImage);
+            rt.play();
+        });
+
+        Timer timerAction = new Timer();
+        TimerTask task;
+
+        if (isCollapsed) {
+
+            titleOnExpansion();
+
+            task = new TimerTask() {
+                int height = 72;
+
+                @Override
+                public void run() {
+
+                    if (height <= 284) {
+                        cardBasePane.setPrefHeight(height);
+                        setPrefHeight(height);
+                        height++;
+                    } else {
+                        this.cancel();
+                    }
+
+                }
+
+            };
+
+        } else {
+
+            titleOnCollapse();
+
+            task = new TimerTask() {
+
+                int height = 284;
+
+                @Override
+                public void run() {
+
+                    if (height >= 72) {
+                        cardBasePane.setPrefHeight(height);
+                        //Uncomment if this is not working
+                        setPrefHeight(height);
+                        height--;
+                    } else {
+                        this.cancel();
+                    }
+
+                }
+
+            };
+
+        }
+
+        timerAction.scheduleAtFixedRate(task, 0, 2);
+        rotate.start();
+
     }
 
+    private void titleOnExpansion() {
 
+        FadeTransition fadeTransition1 = new FadeTransition();
+        fadeTransition1.setNode(titlePane);
+        fadeTransition1.setDuration(Duration.millis(500));
+        fadeTransition1.setFromValue(1.0);
+        fadeTransition1.setToValue(0.0);
+        fadeTransition1.setOnFinished(event -> titlePane.setVisible(false));
+
+        FadeTransition fadeTransition2 = new FadeTransition();
+        fadeTransition2.setNode(nameHBox);
+        fadeTransition2.setDuration(Duration.millis(500));
+        fadeTransition2.setFromValue(0.0);
+        fadeTransition2.setToValue(1.0);
+        nameHBox.setVisible(true);
+
+        fadeTransition1.play();
+        fadeTransition2.play();
+
+        isCollapsed = false;
+    }
+
+    private void titleOnCollapse() {
+
+        FadeTransition fadeTransition1 = new FadeTransition();
+        fadeTransition1.setNode(titlePane);
+        fadeTransition1.setDuration(Duration.millis(500));
+        fadeTransition1.setFromValue(0.0);
+        fadeTransition1.setToValue(1.0);
+        titlePane.setVisible(true);
+
+        FadeTransition fadeTransition2 = new FadeTransition();
+        fadeTransition2.setNode(nameHBox);
+        fadeTransition2.setDuration(Duration.millis(500));
+        fadeTransition2.setFromValue(1.0);
+        fadeTransition2.setToValue(0.0);
+        fadeTransition2.setOnFinished(event -> nameHBox.setVisible(false));
+
+        fadeTransition1.play();
+        fadeTransition2.play();
+
+        isCollapsed = true;
+    }
+
+    public void addDownloadableObject(Downloadable downloadableObject) {
+        this.downloadableObject = downloadableObject;
+        init();
+    }
 
     private void init() {
+        serialNumberText.setText(downloadableObject.getSerialNo() + ".");
+        fileNameText.setText(downloadableObject.getFileName());
+        titleText.setText(downloadableObject.getFileName());
+        fileTypeText.setText(downloadableObject.getFileType());
+        setProgressValue();
+        transferRateValueText.setText("0 B/s");
+        etaValueText.setText("INF");
+        updateFileTypeImage();
+        updateETA_TransferRate();
+    }
 
+    public void updateFileTypeImage() {
+        fileTypeIconImage.setImage((javafx.scene.image.Image) downloadableObject.getFileTypeIcon());
+    }
+
+    public void setProgressValue() {
+        progressBarUI.setProgress(downloadableObject.getProgress());
+        progressValueText.setText(downloadableObject.getProgressValuesAsString());
+    }
+
+    public void updateETA_TransferRate() {
+        Timer timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            double change = 0;
+            String speed = "";
+            @Override
+            public void run() {
+                double sp = downloadableObject.getDownloaded();
+                change = sp-change;
+                sp = change/(8*1024);
+                if(sp>1024){
+                    speed = (sp/1024) + " MB/s";
+                }else{
+                    speed = (sp) + " KB/s";
+                }
+                double eta = (downloadableObject.getSize() - downloadableObject.getDownloaded())/sp;
+                String unit = "";
+                if(eta>3600){
+                    unit += (eta/3600) + " hr ";
+                    eta%=3600;
+                }
+                if(eta>60){
+                    unit += (eta/60) + " min ";
+                    eta%=60;
+                }
+                unit += eta + " s";
+                etaValueText.setText(unit);
+                transferRateValueText.setText(speed);
+            }
+        }, 3, 1000);
+    }
+
+    public void updateProgressValue(){
+        progressValueText.setText(downloadableObject.getProgressValuesAsString());
+    }
+
+    public void setPausabelCard(boolean isPausable){
+        pauseResumeButton.setDisable(false);
     }
 
 }
