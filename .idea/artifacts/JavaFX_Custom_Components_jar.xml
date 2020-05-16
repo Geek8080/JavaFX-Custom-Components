@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="JavaFX Custom Components:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JavaFX_Custom_Components_jar</output-path>
+    <root id="root">
+      <element id="archive" name="JavaFX Custom Components.jar">
+        <element id="module-output" name="JavaFX Custom Components" />
+      </element>
+      <element id="library" level="project" name="com.jfoenix:jfoenix:8.0.8" />
+      <element id="library" level="project" name="org.apache.logging.log4j:log4j-core:2.0-rc2" />
+    </root>
+  </artifact>
+</component>

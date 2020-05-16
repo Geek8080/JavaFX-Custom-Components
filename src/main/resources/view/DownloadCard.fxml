@@ -12,54 +12,60 @@
 
 <fx:root fx:id="cardBasePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="284.0" prefWidth="610.0" styleClass="card" stylesheets="@../css/theme.css" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox fx:id="nameHBox" layoutX="14.0" layoutY="26.0" styleClass="hbox" visible="false">
+      <HBox fx:id="nameHBox" layoutX="14.0" layoutY="26.0" styleClass="hbox">
          <children>
             <Text id="downloadName" fx:id="serialNumberText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="100." />
             <Text id="downloadName" fx:id="fileNameText" layoutX="10.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Download File Name" wrappingWidth="485.0498046875" />
          </children>
       </HBox>
       <JFXProgressBar fx:id="progressBarUI" layoutY="-5.0" prefHeight="9.0" prefWidth="610.0" />
-      <VBox fx:id="typeHolderVBox" layoutX="409.0" layoutY="99.0" styleClass="fileTypeVBox">
+      <AnchorPane fx:id="shrinkPane" layoutX="14.0" layoutY="86.0">
          <children>
-            <ImageView fx:id="fileTypeIconImage" fitHeight="84.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../image/file.png" />
-               </image>
-            </ImageView>
-            <Text id="fileType" fx:id="fileTypeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Document/PDF" wrappingWidth="186.6708984375" />
-         </children>
-      </VBox>
-      <HBox fx:id="statHolderHBox" layoutX="14.0" layoutY="86.0" prefHeight="126.0" prefWidth="389.0" styleClass="hbox">
-         <children>
-            <VBox fx:id="keyHolderVBox" prefHeight="126.0" prefWidth="102.0" styleClass="keyVBox">
+            <VBox fx:id="typeHolderVBox" layoutX="395.0" layoutY="13.0" styleClass="fileTypeVBox">
                <children>
-                  <Text id="infoKey" fx:id="progressText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Progress:" />
-                  <Text id="infoKey" fx:id="transferRateText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Transfer Rate:" />
-                  <Text id="infoKey" fx:id="etaText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="ETA:" />
+                  <ImageView fx:id="fileTypeIconImage" fitHeight="84.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/file.png" />
+                     </image>
+                  </ImageView>
+                  <Text id="fileType" fx:id="fileTypeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Document/PDF" wrappingWidth="186.6708984375" />
                </children>
             </VBox>
-            <VBox fx:id="valueHolderVBox" prefHeight="126.0" prefWidth="284.0" styleClass="valueVBox">
+            <HBox fx:id="statHolderHBox" prefHeight="126.0" prefWidth="389.0" styleClass="hbox">
                <children>
-                  <Text id="infoKey" fx:id="progressValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="54%(200MB/3.2GB)" />
-                  <Text id="infoKey" fx:id="transferRateValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="4.0 MB/s" />
-                  <Text id="infoKey" fx:id="etaValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="1 Day 3 Hour 45 min" />
+                  <VBox fx:id="keyHolderVBox" prefHeight="126.0" prefWidth="102.0" styleClass="keyVBox">
+                     <children>
+                        <Text id="infoKey" fx:id="progressText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Progress:" />
+                        <Text id="infoKey" fx:id="transferRateText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Transfer Rate:" />
+                        <Text id="infoKey" fx:id="etaText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="ETA:" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="valueHolderVBox" prefHeight="126.0" prefWidth="284.0" styleClass="valueVBox">
+                     <children>
+                        <Text id="infoKey" fx:id="progressValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="54%(200MB/3.2GB)" />
+                        <Text id="infoKey" fx:id="transferRateValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="4.0 MB/s" />
+                        <Text id="infoKey" fx:id="etaValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="1 Day 3 Hour 45 min" />
+                     </children>
+                  </VBox>
                </children>
-            </VBox>
-         </children>
-      </HBox>
-      <AnchorPane fx:id="titlePane" layoutY="2.0" prefHeight="69.0" prefWidth="453.0" styleClass="titlePane" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="2.0">
-         <children>
-            <Text id="title" fx:id="titleText" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="File Name" wrappingWidth="610.0000043213367" />
+            </HBox>
+            <JFXButton fx:id="pauseResumeButton" contentDisplay="CENTER" disable="true" layoutX="355.0" layoutY="142.0" onMouseClicked="#pause_resume" ripplerFill="#afdadb" text="Pause">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </JFXButton>
+            <JFXButton fx:id="cancelButton" contentDisplay="CENTER" layoutX="488.0" layoutY="142.0" onMouseClicked="#cancel" ripplerFill="#afdadb" text="Cancel">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </JFXButton>
          </children>
       </AnchorPane>
-      <JFXButton fx:id="pauseResumeButton" contentDisplay="CENTER" disable="true" layoutX="369.0" layoutY="228.0" onMouseClicked="#pause_resume" ripplerFill="#afdadb" text="Pause">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor></JFXButton>
-      <JFXButton fx:id="cancelButton" contentDisplay="CENTER" layoutX="502.0" layoutY="228.0" onMouseClicked="#cancel" ripplerFill="#afdadb" text="Cancel">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor></JFXButton>
+      <AnchorPane fx:id="titlePane" layoutY="2.0" prefHeight="69.0" prefWidth="453.0" styleClass="titlePane" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="2.0">
+         <children>
+            <Text id="title" fx:id="titleText" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="File Name" wrappingWidth="555.0000052750111" />
+         </children>
+      </AnchorPane>
       <ImageView fx:id="shrinkIconImage" fitHeight="40.0" fitWidth="40.0" layoutX="556.0" layoutY="18.0" onMouseClicked="#shrink_expand" pickOnBounds="true" preserveRatio="true" styleClass="shrinkImageButton">
          <image>
             <Image url="@../image/arrow.png" />

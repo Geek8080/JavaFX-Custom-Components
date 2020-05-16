@@ -32,6 +32,8 @@ public class DownloadCard extends AnchorPane {
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
+        this.setManaged(true);
+
         this.setMaxSize(Control.USE_PREF_SIZE, Control.USE_PREF_SIZE);
         this.setMinSize(Control.USE_PREF_SIZE, Control.USE_PREF_SIZE);
 
@@ -48,7 +50,7 @@ public class DownloadCard extends AnchorPane {
         }
     }
 
-    private boolean isCollapsed = true;
+    private boolean isCollapsed = false;
     private Downloadable downloadableObject;
     private boolean isPaused = false;
 
@@ -117,6 +119,9 @@ public class DownloadCard extends AnchorPane {
 
     @FXML
     private JFXButton cancelButton;
+
+    @FXML
+    private AnchorPane shrinkPane;
 
     @FXML
     public void cancel(MouseEvent event) {
@@ -224,8 +229,17 @@ public class DownloadCard extends AnchorPane {
         fadeTransition2.setToValue(1.0);
         nameHBox.setVisible(true);
 
+        FadeTransition fadeTransition3 = new FadeTransition();
+        fadeTransition3.setNode(shrinkPane);
+        fadeTransition3.setDuration(Duration.millis(300));
+        fadeTransition3.setFromValue(0.0);
+        fadeTransition3.setToValue(1.0);
+        fadeTransition3.setDelay(Duration.millis(300));
+        shrinkPane.setVisible(true);
+
         fadeTransition1.play();
         fadeTransition2.play();
+        fadeTransition3.play();
 
         isCollapsed = false;
     }
@@ -246,8 +260,16 @@ public class DownloadCard extends AnchorPane {
         fadeTransition2.setToValue(0.0);
         fadeTransition2.setOnFinished(event -> nameHBox.setVisible(false));
 
+        FadeTransition fadeTransition3 = new FadeTransition();
+        fadeTransition3.setNode(shrinkPane);
+        fadeTransition3.setDuration(Duration.millis(100));
+        fadeTransition3.setFromValue(1.0);
+        fadeTransition3.setToValue(0.0);
+        fadeTransition3.setOnFinished(event -> shrinkPane.setVisible(false));
+
         fadeTransition1.play();
         fadeTransition2.play();
+        fadeTransition3.play();
 
         isCollapsed = true;
     }
