@@ -1,5 +1,6 @@
 package card.controller;
 
+import card.Main;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.effects.JFXDepthManager;
@@ -30,6 +31,8 @@ public class DownloadCard extends AnchorPane {
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
+        Main.logger.info("Successfully assigned Controller to the FXML and set the root.");
+
         this.setManaged(true);
 
         this.setMaxSize(Control.USE_PREF_SIZE, Control.USE_PREF_SIZE);
@@ -45,6 +48,8 @@ public class DownloadCard extends AnchorPane {
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println(ex.getMessage());
+
+            Main.logger.error("Failed to load the FXML.(" + ex.getMessage() + ")", ex);
         }
     }
 
@@ -131,14 +136,16 @@ public class DownloadCard extends AnchorPane {
         if (isPaused) {
             pauseResumeButton.setDisable(true);
             downloadableObject.resume();
+            Main.logger.info("Resumed the download Successfully: " + downloadableObject.getFileName());
             isPaused = false;
             pauseResumeButton.setDisable(false);
             pauseResumeButton.setText("Pause");
         } else {
             pauseResumeButton.setDisable(true);
             downloadableObject.pause();
+            Main.logger.info("Paused the download Successfully: " + downloadableObject.getFileName());
             isPaused = true;
-            pauseResumeButton.setDisable(true);
+            pauseResumeButton.setDisable(false);
             pauseResumeButton.setText("Resume");
         }
     }
@@ -154,6 +161,8 @@ public class DownloadCard extends AnchorPane {
             rt.setNode(shrinkIconImage);
             rt.play();
         });
+
+        Main.logger.info("Declared rotation animation.");
 
         Timer timerAction = new Timer();
         TimerTask task;
@@ -206,7 +215,12 @@ public class DownloadCard extends AnchorPane {
 
         }
 
+        Main.logger.info("Added timer task to schedule with delay of 0ms.");
+
         timerAction.scheduleAtFixedRate(task, 0, 2);
+
+        Main.logger.info("Started the rotation animation.");
+
         rotate.start();
 
     }
@@ -220,12 +234,16 @@ public class DownloadCard extends AnchorPane {
         fadeTransition1.setToValue(0.0);
         fadeTransition1.setOnFinished(event -> titlePane.setVisible(false));
 
+        Main.logger.info("Defined an animation to fade out titlePane.");
+
         FadeTransition fadeTransition2 = new FadeTransition();
         fadeTransition2.setNode(nameHBox);
         fadeTransition2.setDuration(Duration.millis(500));
         fadeTransition2.setFromValue(0.0);
         fadeTransition2.setToValue(1.0);
         nameHBox.setVisible(true);
+
+        Main.logger.info("Defined an animation to fade in nameHBox.");
 
         FadeTransition fadeTransition3 = new FadeTransition();
         fadeTransition3.setNode(shrinkPane);
@@ -235,11 +253,17 @@ public class DownloadCard extends AnchorPane {
         fadeTransition3.setDelay(Duration.millis(300));
         shrinkPane.setVisible(true);
 
+        Main.logger.info("Defined an animation to fade in shrinkPane(Main Content- Info).");
+
         fadeTransition1.play();
         fadeTransition2.play();
         fadeTransition3.play();
 
+        Main.logger.info("Played fade animations for tilePane, nameHBox and shrinkPane.");
+
         isCollapsed = false;
+
+        Main.logger.info("Changed state of card to expanded.");
     }
 
     private void titleOnCollapse() {
@@ -251,12 +275,16 @@ public class DownloadCard extends AnchorPane {
         fadeTransition1.setToValue(1.0);
         titlePane.setVisible(true);
 
+        Main.logger.info("Defined an animation to fade in titlePane.");
+
         FadeTransition fadeTransition2 = new FadeTransition();
         fadeTransition2.setNode(nameHBox);
         fadeTransition2.setDuration(Duration.millis(500));
         fadeTransition2.setFromValue(1.0);
         fadeTransition2.setToValue(0.0);
         fadeTransition2.setOnFinished(event -> nameHBox.setVisible(false));
+
+        Main.logger.info("Defined an animation to fade out nameHBox.");
 
         FadeTransition fadeTransition3 = new FadeTransition();
         fadeTransition3.setNode(shrinkPane);
@@ -265,16 +293,26 @@ public class DownloadCard extends AnchorPane {
         fadeTransition3.setToValue(0.0);
         fadeTransition3.setOnFinished(event -> shrinkPane.setVisible(false));
 
+        Main.logger.info("Defined an animation to fade out shrinkPane(Main Content- Info).");
+
         fadeTransition1.play();
         fadeTransition2.play();
         fadeTransition3.play();
 
+        Main.logger.info("Played fade animations for tilePane, nameHBox and shrinkPane.");
+
         isCollapsed = true;
+
+        Main.logger.info("Changed state of card to collapsed.");
     }
 
     public void addDownloadableObject(Downloadable downloadableObject) {
         this.downloadableObject = downloadableObject;
-        init();
+        try{
+            init();
+        }catch(Exception ex){
+            Main.logger.fatal("Encountered an error while initialising the card with new download object.(" + ex.getMessage() + ")", ex);
+        }
     }
 
     private void init() {
