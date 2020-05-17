@@ -1,4 +1,4 @@
-package utils;
+package card.utils;
 
 import javax.swing.*;
 

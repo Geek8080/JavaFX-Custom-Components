@@ -1,12 +1,10 @@
-package controller;
+package card.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.effects.JFXDepthManager;
 import javafx.animation.FadeTransition;
 import javafx.animation.RotateTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Control;
@@ -18,7 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
-import utils.Downloadable;
+import card.utils.Downloadable;
 
 import java.util.Timer;
 import java.util.TimerTask;

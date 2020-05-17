@@ -1,4 +1,6 @@
 .card{
+    -fx-border-color: #282828;
+    -fx-border-width: 0.5;
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 0 0 2em 2em;
     -fx-border-radius: 0 0 2em 2em;

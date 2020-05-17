@@ -18,7 +18,7 @@
             <Text id="downloadName" fx:id="fileNameText" layoutX="10.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Download File Name" wrappingWidth="485.0498046875" />
          </children>
       </HBox>
-      <JFXProgressBar fx:id="progressBarUI" layoutY="-5.0" prefHeight="9.0" prefWidth="610.0" />
+      <JFXProgressBar fx:id="progressBarUI" layoutY="-5.0" prefHeight="9.0" prefWidth="610.0" AnchorPane.leftAnchor="0.5" AnchorPane.rightAnchor="0.5" AnchorPane.topAnchor="0.5" />
       <AnchorPane fx:id="shrinkPane" layoutX="14.0" layoutY="86.0">
          <children>
             <VBox fx:id="typeHolderVBox" layoutX="395.0" layoutY="13.0" styleClass="fileTypeVBox">
