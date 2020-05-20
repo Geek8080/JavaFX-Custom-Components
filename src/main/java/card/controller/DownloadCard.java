@@ -6,9 +6,13 @@ import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.effects.JFXDepthManager;
 import javafx.animation.FadeTransition;
 import javafx.animation.RotateTransition;
+import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Control;
+import javafx.scene.control.TableColumnBase;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -19,11 +23,24 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import card.utils.Downloadable;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class DownloadCard extends AnchorPane {
+
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    private Timer timer;
 
     public DownloadCard() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/DownloadCard.fxml"));
@@ -56,6 +73,7 @@ public class DownloadCard extends AnchorPane {
     private boolean isCollapsed = false;
     private Downloadable downloadableObject;
     private boolean isPaused = false;
+    private long prevDownloaded = 0;
 
     @FXML
     private AnchorPane cardBasePane;
@@ -125,6 +143,9 @@ public class DownloadCard extends AnchorPane {
 
     @FXML
     private AnchorPane shrinkPane;
+
+    @FXML
+    private Text status;
 
     @FXML
     public void cancel(MouseEvent event) {
@@ -315,7 +336,7 @@ public class DownloadCard extends AnchorPane {
         }
     }
 
-    private void init() {
+    private void init() throws Exception {
         serialNumberText.setText(downloadableObject.getSerialNo() + ".");
         fileNameText.setText(downloadableObject.getFileName());
         titleText.setText(downloadableObject.getFileName());
@@ -323,50 +344,77 @@ public class DownloadCard extends AnchorPane {
         setProgressValue();
         transferRateValueText.setText("0 B/s");
         etaValueText.setText("INF");
-        updateFileTypeImage();
+        //updateFileTypeImage();
         updateETA_TransferRate();
+        //downloadableObject.start();
     }
 
     public void updateFileTypeImage() {
-        fileTypeIconImage.setImage((javafx.scene.image.Image) downloadableObject.getFileTypeIcon());
+        fileTypeIconImage.setImage(SwingFXUtils.toFXImage(getBufferedImage(), null));
     }
 
-    public void setProgressValue() {
+    private BufferedImage getBufferedImage(){
+        Icon icon = this.downloadableObject.getFileTypeIcon();
+        BufferedImage bi = new BufferedImage(
+                icon.getIconWidth(),
+                icon.getIconHeight(),
+                BufferedImage.TYPE_INT_RGB);
+        Graphics g = bi.createGraphics();
+        icon.paintIcon(null, g, 0,0);
+        g.setColor(Color.WHITE);
+        g.dispose();
+
+        return bi;
+    }
+
+    public void setProgressValue() throws Exception{
         progressBarUI.setProgress(downloadableObject.getProgress());
-        progressValueText.setText(downloadableObject.getProgressValuesAsString());
+
+        Platform.runLater(() -> {
+            progressValueText.setText(downloadableObject.getProgressValuesAsString());
+        });
     }
 
     public void updateETA_TransferRate() {
-        Timer timer = new Timer();
+        timer = new Timer();
 
         timer.scheduleAtFixedRate(new TimerTask() {
             double change = 0;
             String speed = "";
             @Override
             public void run() {
-                double sp = downloadableObject.getDownloaded();
-                change = sp-change;
-                sp = change/(8*1024);
-                if(sp>1024){
-                    speed = (sp/1024) + " MB/s";
-                }else{
-                    speed = (sp) + " KB/s";
+                if(downloadableObject.getDownloaded()==downloadableObject.getSize()){
+                    this.cancel();
                 }
-                double eta = (downloadableObject.getSize() - downloadableObject.getDownloaded())/sp;
+                double sp = downloadableObject.getDownloaded();
+                change = sp-prevDownloaded;
+                prevDownloaded = downloadableObject.getDownloaded();
+                sp = change/(1024);
+                if(sp>1024){
+                    speed = String.format("%.3f MB/s",(sp/1024));
+                }else{
+                    speed = String.format("%.3f KB/s",(sp));
+                }
+                double eta = ((double)(downloadableObject.getSize() - downloadableObject.getDownloaded()))/change;
                 String unit = "";
                 if(eta>3600){
-                    unit += (eta/3600) + " hr ";
+                    unit += ((int)eta/3600) + " hr ";
                     eta%=3600;
                 }
                 if(eta>60){
-                    unit += (eta/60) + " min ";
+                    unit += ((int)eta/60) + " min ";
                     eta%=60;
                 }
-                unit += eta + " s";
+                unit += (int)eta + " s";
                 etaValueText.setText(unit);
                 transferRateValueText.setText(speed);
             }
         }, 3, 1000);
+
+    }
+
+    public void setStatus(String str){
+        this.status.setText(str);
     }
 
     public void updateProgressValue(){
@@ -375,6 +423,39 @@ public class DownloadCard extends AnchorPane {
 
     public void setPausabelCard(boolean isPausable){
         pauseResumeButton.setDisable(false);
+    }
+
+    public void setMerging(){
+        Platform.runLater(() -> {
+            this.status.setText("Completing Download...");
+            this.cancelButton.setDisable(true);
+            this.pauseResumeButton.setDisable(true);
+            this.progressValueText.setText("100%");
+            this.etaValueText.setText("Few seconds");
+            this.transferRateValueText.setText("-");
+            this.progressBarUI.setProgress(JFXProgressBar.INDETERMINATE_PROGRESS);
+        });
+    }
+
+    public void setCompleted(){
+        Platform.runLater(() -> {
+            this.progressBarUI.setProgress(1);
+            this.status.setText("Download Completed...");
+            this.cancelButton.setDisable(false);
+            this.cancelButton.setText("OK");
+            this.pauseResumeButton.setVisible(false);
+            this.progressBarUI.setProgress(1);
+            this.getChildren().removeAll();
+        });
+    }
+
+    public void hide(){
+        Platform.runLater(() -> {
+            this.shrinkPane.setMinHeight(0);
+            this.shrinkPane.setMinWidth(0);
+            this.shrinkPane.setPrefHeight(0);
+            this.shrinkPane.setPrefWidth(0);
+        });
     }
 
 }

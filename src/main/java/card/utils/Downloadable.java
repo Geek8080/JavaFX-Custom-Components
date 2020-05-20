@@ -1,8 +1,11 @@
 package card.utils;
 
-import javax.swing.*;
 
-public interface Downloadable {
+
+import javax.swing.*;
+import java.util.Observable;
+
+public interface Downloadable{
 
     //int serialNo = -1;
     //String fileName = "";
@@ -26,9 +29,9 @@ public interface Downloadable {
 
     String getProgressValuesAsString();
 
-    double getDownloaded();
+    long getDownloaded();
 
-    double getSize();
+    long getSize();
 
     Icon getFileTypeIcon();
 

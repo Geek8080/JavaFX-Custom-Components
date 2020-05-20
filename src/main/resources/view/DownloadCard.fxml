@@ -14,8 +14,8 @@
    <children>
       <HBox fx:id="nameHBox" layoutX="14.0" layoutY="26.0" styleClass="hbox">
          <children>
-            <Text id="downloadName" fx:id="serialNumberText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="100." />
-            <Text id="downloadName" fx:id="fileNameText" layoutX="10.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Download File Name" wrappingWidth="485.0498046875" />
+            <Text id="downloadName" fx:id="serialNumberText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" />
+            <Text id="downloadName" fx:id="fileNameText" layoutX="10.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Fetching Details..." wrappingWidth="485.0498046875" />
          </children>
       </HBox>
       <JFXProgressBar fx:id="progressBarUI" layoutY="-5.0" prefHeight="9.0" prefWidth="610.0" AnchorPane.leftAnchor="0.5" AnchorPane.rightAnchor="0.5" AnchorPane.topAnchor="0.5" />
@@ -28,7 +28,7 @@
                         <Image url="@../image/file.png" />
                      </image>
                   </ImageView>
-                  <Text id="fileType" fx:id="fileTypeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Document/PDF" wrappingWidth="186.6708984375" />
+                  <Text id="fileType" fx:id="fileTypeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="--/--" wrappingWidth="186.6708984375" />
                </children>
             </VBox>
             <HBox fx:id="statHolderHBox" prefHeight="126.0" prefWidth="389.0" styleClass="hbox">
@@ -42,9 +42,9 @@
                   </VBox>
                   <VBox fx:id="valueHolderVBox" prefHeight="126.0" prefWidth="284.0" styleClass="valueVBox">
                      <children>
-                        <Text id="infoKey" fx:id="progressValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="54%(200MB/3.2GB)" />
-                        <Text id="infoKey" fx:id="transferRateValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="4.0 MB/s" />
-                        <Text id="infoKey" fx:id="etaValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="1 Day 3 Hour 45 min" />
+                        <Text id="infoValue" fx:id="progressValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="0%(-- b/-- b)" />
+                        <Text id="infoValue" fx:id="transferRateValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="-- b/s" />
+                        <Text id="infoValue" fx:id="etaValueText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="--" />
                      </children>
                   </VBox>
                </children>
@@ -59,6 +59,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </JFXButton>
+            <Text id="infoValue" fx:id="status" layoutX="14.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Text" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="titlePane" layoutY="2.0" prefHeight="69.0" prefWidth="453.0" styleClass="titlePane" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="2.0">
